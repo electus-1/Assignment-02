@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Assignment02_20210808009 {
     public static void main(String[] args) {
-        
+
     }
 }
 
@@ -63,6 +63,99 @@ class Account {
         return "Account " + getAccountNumber() + " has " + getBalance();
     }
 
+}
+
+class PersonalAccount extends Account {
+    private String name;
+    private String surname;
+    private String PIN;
+
+    PersonalAccount() {
+
+    }
+
+    PersonalAccount(String accountNumber, String name, String surname) {
+        super(accountNumber);
+        setName(name);
+        setSurname(surname);
+        setPIN(makeRandomPIN());
+
+    }
+
+    PersonalAccount(String accountNumber, String name, String surname, double balance) {
+        super(accountNumber, balance);
+        setName(name);
+        setSurname(surname);
+        setPIN(makeRandomPIN());
+
+    }
+
+    public static String makeRandomPIN() {
+        return "" + (Math.round(Math.random() * 10)) + (Math.round(Math.random() * 10)) +
+                (Math.round(Math.random() * 10)) + (Math.round(Math.random() * 10));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPIN() {
+        return PIN;
+    }
+
+    public void setPIN(String PIN) {
+        this.PIN = PIN;
+    }
+
+    public String toString() {
+        return "Account " + getAccountNumber() + " belonging to " + getName() + " " + getSurname().toUpperCase()
+                + " has " + getBalance();
+    }
+
+}
+
+class BusinessAccount extends Account {
+    private double interestRate;
+
+    BusinessAccount() {
+
+    }
+
+    BusinessAccount(String accountNumber, double interestRate) {
+        super(accountNumber);
+        setInterestRate(interestRate);
+
+    }
+
+    BusinessAccount(String accountNumber, double balance, double interestRate) {
+        super(accountNumber, balance);
+        setInterestRate(interestRate);
+
+    }
+
+    public double getInterestRate() {
+        return interestRate;
+    }
+
+    public void setInterestRate(double interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public double calculateInterest() {
+        return (getBalance() * getInterestRate());
+    }
 }
 
 class AccountNotFoundException extends RuntimeException {
