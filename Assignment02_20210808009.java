@@ -25,7 +25,7 @@ class BalanceRemainingException extends RuntimeException {
     private double balance;
 
     public double getBalance() {
-        return balance;
+        return this.balance;
     }
 
     @Override
@@ -34,7 +34,7 @@ class BalanceRemainingException extends RuntimeException {
     }
 }
 
-class CompanyNotFoundException {
+class CompanyNotFoundException extends RuntimeException {
     private int id;
     private String name;
 
@@ -50,7 +50,7 @@ class CompanyNotFoundException {
     }
 }
 
-class CustomerNotFoundException {
+class CustomerNotFoundException extends RuntimeException {
     private int id;
     private String name;
     private String surname;
@@ -65,5 +65,14 @@ class CustomerNotFoundException {
             return "CustomerNotFoundException: id - " + id;
         }
         return "CustomerNotFoundException";
+    }
+}
+
+class InvalidAmountException extends RuntimeException {
+    private double amount;
+
+    @Override
+    public String toString() {
+        return "InvalidAmountException: " + this.amount;
     }
 }
