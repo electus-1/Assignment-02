@@ -158,6 +158,81 @@ class BusinessAccount extends Account {
     }
 }
 
+class Customer {
+    private int id;
+    private String name;
+    private String surname;
+    private ArrayList<PersonalAccount> personalAccounts;
+
+    Customer() {
+
+    }
+
+    Customer(String name, String surname) {
+        setName(name);
+        setSurname(surname);
+    }
+
+    public void openAccount(String accountNumber) {
+        personalAccounts.add(new PersonalAccount(accountNumber, getName(), getSurname()));
+    }
+
+    public PersonalAccount getAccount(String accountNumber) {
+        for (PersonalAccount personalAccount : personalAccounts) {
+            if (personalAccount.getAccountNumber().equals(accountNumber)) {
+                return personalAccount;
+            }
+        }
+        throw new AccountNotFoundException(accountNumber);
+    }
+
+    public void closeAccount(String accountNumber) {
+        boolean flag = true;
+        for (int i = 0; i < personalAccounts.size(); i++) {
+            if (personalAccounts.get(i).getAccountNumber().equals(accountNumber)) {
+                flag = false;
+                if (personalAccounts.get(i).getBalance() > 0) {
+                    throw new BalanceRemainingException(personalAccounts.get(i).getBalance());
+                } else {
+                    personalAccounts.remove(personalAccounts.get(i));
+                }
+            }
+        }
+        if (flag) {
+            throw new AccountNotFoundException(accountNumber);
+        }
+
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String toString() {
+        return getName() + " " + getSurname().toUpperCase();
+    }
+}
+
 class AccountNotFoundException extends RuntimeException {
     private String acctNum;
 
