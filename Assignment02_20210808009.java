@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Assignment02_20210808009 {
     public static void main(String[] args) {
-
+        
     }
 }
 
@@ -16,6 +16,7 @@ class AccountNotFoundException extends RuntimeException {
     private String acctNum;
 
     public AccountNotFoundException(String acctNum) {
+        super("AccountNotFoundException: " + acctNum);
         this.acctNum = acctNum;
     }
 
