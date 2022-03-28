@@ -37,7 +37,7 @@ class BalanceRemainingException extends RuntimeException {
 class CompanyNotFoundException {
     private int id;
     private String name;
-    
+
     @Override
     public String toString() {
         if (this.id == 0) {
@@ -47,5 +47,23 @@ class CompanyNotFoundException {
             return "CompanyNotFoundException: id - " + this.id;
         }
         return "CompanyNotFoundException";
+    }
+}
+
+class CustomerNotFoundException {
+    private int id;
+    private String name;
+    private String surname;
+
+    @Override
+    public String toString() {
+        if (this.id == 0) {
+            return "CustomerNotFoundException: name - " + name
+                    + " " + surname;
+        }
+        if (this.name == null || this.surname == null) {
+            return "CustomerNotFoundException: id - " + id;
+        }
+        return "CustomerNotFoundException";
     }
 }
