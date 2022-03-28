@@ -15,11 +15,6 @@ public class Assignment02_20210808009 {
 class AccountNotFoundException extends RuntimeException {
     private String acctNum;
 
-    public AccountNotFoundException(String acctNum) {
-        super("AccountNotFoundException: " + acctNum);
-        this.acctNum = acctNum;
-    }
-
     @Override
     public String toString() {
         return "AccountNotFoundException: " + this.acctNum;
@@ -29,11 +24,6 @@ class AccountNotFoundException extends RuntimeException {
 class BalanceRemainingException extends RuntimeException {
     private double balance;
 
-    public BalanceRemainingException(double balance) {
-        super("BalanceRemainingException: " + balance);
-        this.balance = balance;
-    }
-
     public double getBalance() {
         return balance;
     }
@@ -41,5 +31,21 @@ class BalanceRemainingException extends RuntimeException {
     @Override
     public String toString() {
         return "BalanceRemainingException: " + getBalance();
+    }
+}
+
+class CompanyNotFoundException {
+    private int id;
+    private String name;
+    
+    @Override
+    public String toString() {
+        if (this.id == 0) {
+            return "CompanyNotFoundException: name - " + this.name;
+        }
+        if (this.name == null) {
+            return "CompanyNotFoundException: id - " + this.id;
+        }
+        return "CompanyNotFoundException";
     }
 }
