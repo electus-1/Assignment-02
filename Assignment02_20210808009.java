@@ -233,6 +233,70 @@ class Customer {
     }
 }
 
+class Company {
+    private int id;
+    private String name;
+    private ArrayList<BusinessAccount> businessAccounts;
+
+    Company() {
+
+    }
+
+    Company(String name) {
+        setName(name);
+    }
+
+    public void openAccount(String accountNumber, double interestRate) {
+        businessAccounts.add(new BusinessAccount(accountNumber, interestRate));
+    }
+
+    public BusinessAccount getAccount(String accountNumber) {
+        for (BusinessAccount businessAccount : businessAccounts) {
+            if (businessAccount.getAccountNumber().equals(accountNumber)) {
+                return businessAccount;
+            }
+        }
+        throw new AccountNotFoundException(accountNumber);
+    }
+
+    public void closeAccount(String accountNumber) {
+        boolean flag = true;
+        for (int i = 0; i < businessAccounts.size(); i++) {
+            if (businessAccounts.get(i).getAccountNumber().equals(accountNumber)) {
+                flag = false;
+                if (businessAccounts.get(i).getBalance() > 0) {
+                    throw new BalanceRemainingException(businessAccounts.get(i).getBalance());
+                } else {
+                    businessAccounts.remove(businessAccounts.get(i));
+                }
+            }
+        }
+        if (flag) {
+            throw new AccountNotFoundException(accountNumber);
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String toString() {
+        return getName();
+    }
+}
+
 class AccountNotFoundException extends RuntimeException {
     private String acctNum;
 
