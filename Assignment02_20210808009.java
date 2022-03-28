@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Assignment02_20210808009 {
     public static void main(String[] args) {
-        
+
     }
 }
 
@@ -23,5 +23,23 @@ class AccountNotFoundException extends RuntimeException {
     @Override
     public String toString() {
         return "AccountNotFoundException: " + this.acctNum;
+    }
+}
+
+class BalanceRemainingException extends RuntimeException {
+    private double balance;
+
+    public BalanceRemainingException(double balance) {
+        super("BalanceRemainingException: " + balance);
+        this.balance = balance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    @Override
+    public String toString() {
+        return "BalanceRemainingException: " + getBalance();
     }
 }
