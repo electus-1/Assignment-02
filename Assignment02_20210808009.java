@@ -8,7 +8,34 @@ import java.util.ArrayList;
 
 public class Assignment02_20210808009 {
     public static void main(String[] args) {
-
+        Bank b = new Bank("My Bank", "My Bank's Address");
+        b.addCompany(1, "Company 1");
+        b.getCompany(1).openAccount("1234", 0.05);
+        b.addAccount(b.getCompany(1).getAccount("1234"));
+        b.getAccount("1234").deposit(500000);
+        b.getCompany(1).getAccount("1234").deposit(500000);
+        b.getCompany(1).openAccount("1235", 0.03);
+        b.addAccount(b.getCompany(1).getAccount("1235"));
+        b.getCompany(1).getAccount("1235").deposit(25000);
+        b.addCompany(2, "Company 2");
+        b.getCompany(2).openAccount("2345", 0.03);
+        b.addAccount(b.getCompany(2).getAccount("2345"));
+        b.getCompany(2).getAccount("2345").deposit(350);
+        b.addCustomer(1, "Customer", "1");
+        b.addCustomer(2, "Customer", "2");
+        Customer c = b.getCustomer(1);
+        c.openAccount("3456");
+        c.openAccount("3457");
+        c.getAccount("3456").deposit(150);
+        c.getAccount("3457").deposit(250);
+        c = b.getCustomer(2);
+        c.openAccount("4567");
+        c.getAccount("4567").deposit(1000);
+        b.addAccount(c.getAccount("4567"));
+        c = b.getCustomer(1);
+        b.addAccount(c.getAccount("3456"));
+        b.addAccount(c.getAccount("3457"));
+        System.out.println(b.toString());
     }
 }
 
@@ -16,9 +43,14 @@ public class Assignment02_20210808009 {
 class Bank {
     private String name;
     private String address;
-    private ArrayList<Customer> customers;
-    private ArrayList<Company> companies;
-    private ArrayList<Account> accounts;
+    private ArrayList<Customer> customers = new ArrayList<>();
+    private ArrayList<Company> companies = new ArrayList<>();
+    private ArrayList<Account> accounts = new ArrayList<>();
+
+    public Bank(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
 
     public String getName() {
         return name;
@@ -63,7 +95,7 @@ class Bank {
     //surname isn't mentioned as a parameter in the pdf file
     public Customer getCustomer(String name, String surname) {
         for (Customer customer : customers) {
-            if (customer.getName().equals(name) && customer.getName().equals(surname)) {
+            if (customer.getName().equals(name)) {
                 return customer;
             }
         }
@@ -110,7 +142,28 @@ class Bank {
             accounts.remove(getAccount(accountNumber));
         }
     }
-    
+
+    public String writeCompaniesDown() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Company company : companies) {
+            stringBuilder.append("\t" + company.getName() + "\n" + company.writeBusinessAccountsDown());
+        }
+        return String.valueOf(stringBuilder);
+    }
+
+    public String writeCustomersDown() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Customer customer : customers) {
+            stringBuilder.append("\t" + customer.getName() + " " + customer.getSurname()
+                    + "\n" + customer.writePersonalAccountsDown());
+        }
+        return String.valueOf(stringBuilder);
+    }
+
+    @Override
+    public String toString() {
+        return getName() + "\t" + getAddress() + "\n" + writeCompaniesDown() + writeCustomersDown();
+    }
 }
 
 class Account {
@@ -263,7 +316,7 @@ class Customer {
     private int id;
     private String name;
     private String surname;
-    private ArrayList<PersonalAccount> personalAccounts;
+    private ArrayList<PersonalAccount> personalAccounts = new ArrayList<>();
 
     Customer() {
 
@@ -305,6 +358,15 @@ class Customer {
 
     }
 
+    public String writePersonalAccountsDown() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (PersonalAccount personalAccount : personalAccounts) {
+            stringBuilder.append("\t" + "\t" + personalAccount.getAccountNumber() + "\t" + personalAccount.getBalance()
+                    + "\n");
+        }
+        return String.valueOf(stringBuilder);
+    }
+
     public int getId() {
         return id;
     }
@@ -337,7 +399,7 @@ class Customer {
 class Company {
     private int id;
     private String name;
-    private ArrayList<BusinessAccount> businessAccounts;
+    private ArrayList<BusinessAccount> businessAccounts = new ArrayList<>();
 
     Company() {
 
@@ -375,6 +437,15 @@ class Company {
         if (flag) {
             throw new AccountNotFoundException(accountNumber);
         }
+    }
+
+    public String writeBusinessAccountsDown() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (BusinessAccount businessAccount : businessAccounts) {
+            stringBuilder.append("\t" + "\t" + businessAccount.getAccountNumber() + "\t" +
+                    businessAccount.getInterestRate() + "\t" + businessAccount.getBalance() + "\n");
+        }
+        return String.valueOf(stringBuilder);
     }
 
     public int getId() {
