@@ -88,6 +88,29 @@ class Bank {
         throw new CompanyNotFoundException(0, name);
     }
 
+    public Account getAccount(String accountNumber) {
+        for (Account account : accounts) {
+            if (account.getAccountNumber().equals(accountNumber)) {
+                return account;
+            }
+        }
+        throw new AccountNotFoundException(accountNumber);
+    }
+
+    public void transferFunds(String accountFrom, String accountTo, double amount) {
+        getAccount(accountFrom).withdrawal(amount);
+        getAccount(accountTo).deposit(amount);
+
+    }
+
+    public void closeAccount(String accountNumber) {
+        if (getAccount(accountNumber).getBalance() > 0) {
+            throw new BalanceRemainingException(getAccount(accountNumber).getBalance());
+        } else {
+            accounts.remove(getAccount(accountNumber));
+        }
+    }
+    
 }
 
 class Account {
