@@ -12,6 +12,84 @@ public class Assignment02_20210808009 {
     }
 }
 
+
+class Bank {
+    private String name;
+    private String address;
+    private ArrayList<Customer> customers;
+    private ArrayList<Company> companies;
+    private ArrayList<Account> accounts;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    //surname isn't mentioned as a parameter in the pdf file
+    public void addCustomer(int id, String name, String surname) {
+        customers.add(new Customer(name, surname));
+        customers.get(customers.size() - 1).setId(id);
+    }
+
+    public void addCompany(int id, String name) {
+        companies.add(new Company(name));
+        companies.get(companies.size() - 1).setId(id);
+    }
+
+    public void addAccount(Account account) {
+        accounts.add(account);
+    }
+
+    public Customer getCustomer(int id) {
+        for (Customer customer : customers) {
+            if (customer.getId() == id) {
+                return customer;
+            }
+        }
+        throw new CustomerNotFoundException(id, null, null);
+    }
+
+    //surname isn't mentioned as a parameter in the pdf file
+    public Customer getCustomer(String name, String surname) {
+        for (Customer customer : customers) {
+            if (customer.getName().equals(name) && customer.getName().equals(surname)) {
+                return customer;
+            }
+        }
+        throw new CustomerNotFoundException(0, name, surname);
+    }
+
+    public Company getCompany(int id) {
+        for (Company company : companies) {
+            if (company.getId() == id) {
+                return company;
+            }
+        }
+        throw new CompanyNotFoundException(id, null);
+    }
+
+    public Company getCompany(String name) {
+        for (Company company : companies) {
+            if (company.getName().equals(name)) {
+                return company;
+            }
+        }
+        throw new CompanyNotFoundException(0, name);
+    }
+
+}
+
 class Account {
     private String accountNumber;
     private double balance;
