@@ -495,7 +495,7 @@ class BalanceRemainingException extends RuntimeException {
 
     @Override
     public String toString() {
-        return "BalanceRemainingException: " + getBalance();
+        return "BalanceRemainingException: " + this.balance;
     }
 }
 
@@ -503,20 +503,23 @@ class CompanyNotFoundException extends RuntimeException {
     private int id;
     private String name;
 
-    public CompanyNotFoundException(int id, String name) {
+    public CompanyNotFoundException(int id) {
         this.id = id;
+        this.name = null;
+    }
+
+    public CompanyNotFoundException(String name) {
         this.name = name;
+        this.id = 0;
     }
 
     @Override
     public String toString() {
-        if (this.id == 0) {
-            return "CompanyNotFoundException: name - " + this.name;
-        }
         if (this.name == null) {
             return "CompanyNotFoundException: id - " + this.id;
+        } else {
+            return "CompanyNotFoundException: name - " + this.name;
         }
-        return "CompanyNotFoundException";
     }
 }
 
@@ -525,22 +528,25 @@ class CustomerNotFoundException extends RuntimeException {
     private String name;
     private String surname;
 
-    public CustomerNotFoundException(int id, String name, String surname) {
+    public CustomerNotFoundException(int id) {
         this.id = id;
+        this.name = null;
+        this.surname = null;
+    }
+
+    public CustomerNotFoundException(String name, String surname) {
+        this.id = 0;
         this.name = name;
         this.surname = surname;
     }
 
     @Override
     public String toString() {
-        if (this.id == 0) {
-            return "CustomerNotFoundException: name - " + name
-                    + " " + surname;
-        }
         if (this.name == null || this.surname == null) {
             return "CustomerNotFoundException: id - " + id;
+        } else {
+            return "CustomerNotFoundException: name - " + name + " " + surname;
         }
-        return "CustomerNotFoundException";
     }
 }
 
