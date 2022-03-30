@@ -1,6 +1,6 @@
 /*
  * @author: Baran Kirca
- * @version: 29.03.2022
+ * @version: 30.03.2022
  */
 
 import java.lang.RuntimeException;
@@ -43,13 +43,16 @@ public class Assignment02_20210808009 {
 class Bank {
     private String name;
     private String address;
-    private ArrayList<Customer> customers = new ArrayList<>();
-    private ArrayList<Company> companies = new ArrayList<>();
-    private ArrayList<Account> accounts = new ArrayList<>();
+    private ArrayList<Customer> customers;
+    private ArrayList<Company> companies;
+    private ArrayList<Account> accounts;
 
     public Bank(String name, String address) {
         this.name = name;
         this.address = address;
+        this.customers = new ArrayList<>();
+        this.companies = new ArrayList<>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
@@ -68,15 +71,18 @@ class Bank {
         this.address = address;
     }
 
-    //surname isn't mentioned as a parameter in the pdf file
+
     public void addCustomer(int id, String name, String surname) {
-        customers.add(new Customer(name, surname));
-        customers.get(customers.size() - 1).setId(id);
+        Customer customer = new Customer(name, surname);
+        customer.setId(id);
+        customers.add(customer);
+
     }
 
     public void addCompany(int id, String name) {
-        companies.add(new Company(name));
-        companies.get(companies.size() - 1).setId(id);
+        Company company = new Company(name);
+        company.setId(id);
+        companies.add(company);
     }
 
     public void addAccount(Account account) {
@@ -89,17 +95,17 @@ class Bank {
                 return customer;
             }
         }
-        throw new CustomerNotFoundException(id, null, null);
+        throw new CustomerNotFoundException(id);
     }
 
-    //surname isn't mentioned as a parameter in the pdf file
+
     public Customer getCustomer(String name, String surname) {
         for (Customer customer : customers) {
-            if (customer.getName().equals(name)) {
+            if (customer.getName().equals(name) && customer.getSurname().equals(surname)) {
                 return customer;
             }
         }
-        throw new CustomerNotFoundException(0, name, surname);
+        throw new CustomerNotFoundException(name, surname);
     }
 
     public Company getCompany(int id) {
@@ -108,7 +114,7 @@ class Bank {
                 return company;
             }
         }
-        throw new CompanyNotFoundException(id, null);
+        throw new CompanyNotFoundException(id);
     }
 
     public Company getCompany(String name) {
@@ -117,7 +123,7 @@ class Bank {
                 return company;
             }
         }
-        throw new CompanyNotFoundException(0, name);
+        throw new CompanyNotFoundException(name);
     }
 
     public Account getAccount(String accountNumber) {
@@ -171,9 +177,7 @@ class Account {
     private double balance;
 
     Account(String accountNumber) {
-        this.accountNumber = accountNumber;
-        this.balance = 0.0d;
-
+        this(accountNumber, 0.0d);
     }
 
     Account(String accountNumber, double balance) {
@@ -222,18 +226,16 @@ class PersonalAccount extends Account {
 
 
     PersonalAccount(String accountNumber, String name, String surname) {
-        super(accountNumber);
-        setName(name);
-        setSurname(surname);
-        setPIN(makeRandomPIN());
+        this(accountNumber, name, surname, 0.0d);
+        this.PIN = makeRandomPIN();
 
     }
 
     PersonalAccount(String accountNumber, String name, String surname, double balance) {
         super(accountNumber, balance);
-        setName(name);
-        setSurname(surname);
-        setPIN(makeRandomPIN());
+        this.name = name;
+        this.surname = surname;
+        this.PIN = makeRandomPIN();
 
     }
 
@@ -277,12 +279,7 @@ class BusinessAccount extends Account {
     private double interestRate;
 
     BusinessAccount(String accountNumber, double interestRate) {
-        super(accountNumber);
-        if (interestRate > 0) {
-            setInterestRate(interestRate);
-        } else {
-            throw new IllegalArgumentException("Rate must be positive");
-        }
+        this(accountNumber, 0.0d, interestRate);
     }
 
     BusinessAccount(String accountNumber, double balance, double interestRate) {
@@ -315,11 +312,12 @@ class Customer {
     private int id;
     private String name;
     private String surname;
-    private ArrayList<PersonalAccount> personalAccounts = new ArrayList<>();
+    private ArrayList<PersonalAccount> personalAccounts;
 
     Customer(String name, String surname) {
         setName(name);
         setSurname(surname);
+        personalAccounts = new ArrayList<>();
     }
 
     public void openAccount(String accountNumber) {
@@ -397,10 +395,11 @@ class Customer {
 class Company {
     private int id;
     private String name;
-    private ArrayList<BusinessAccount> businessAccounts = new ArrayList<>();
+    private ArrayList<BusinessAccount> businessAccounts;
 
     Company(String name) {
         setName(name);
+        businessAccounts = new ArrayList<>();
     }
 
     public void openAccount(String accountNumber, double interestRate) {
