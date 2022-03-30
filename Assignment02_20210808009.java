@@ -418,13 +418,13 @@ class Company {
 
     public void closeAccount(String accountNumber) {
         boolean flag = true;
-        for (int i = 0; i < businessAccounts.size(); i++) {
-            if (businessAccounts.get(i).getAccountNumber().equals(accountNumber)) {
+        for (BusinessAccount businessAccount : businessAccounts) {
+            if (businessAccount.getAccountNumber().equals(accountNumber)) {
                 flag = false;
-                if (businessAccounts.get(i).getBalance() > 0) {
-                    throw new BalanceRemainingException(businessAccounts.get(i).getBalance());
+                if (businessAccount.getBalance() > 0) {
+                    throw new BalanceRemainingException(businessAccount.getBalance());
                 } else {
-                    businessAccounts.remove(businessAccounts.get(i));
+                    businessAccounts.remove(businessAccount);
                 }
             }
         }
@@ -447,7 +447,11 @@ class Company {
     }
 
     public void setId(int id) {
-        this.id = id;
+        if (id > 0) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("ID must be positive");
+        }
     }
 
     public String getName() {
