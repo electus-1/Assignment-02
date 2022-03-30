@@ -8,34 +8,25 @@ import java.util.ArrayList;
 
 public class Assignment02_20210808009 {
     public static void main(String[] args) {
-        Bank b = new Bank("My Bank", "My Bank's Address");
-        b.addCompany(1, "Company 1");
-        b.getCompany(1).openAccount("1234", 0.05);
-        b.addAccount(b.getCompany(1).getAccount("1234"));
-        b.getAccount("1234").deposit(500000);
-        b.getCompany(1).getAccount("1234").deposit(500000);
-        b.getCompany(1).openAccount("1235", 0.03);
-        b.addAccount(b.getCompany(1).getAccount("1235"));
-        b.getCompany(1).getAccount("1235").deposit(25000);
-        b.addCompany(2, "Company 2");
-        b.getCompany(2).openAccount("2345", 0.03);
-        b.addAccount(b.getCompany(2).getAccount("2345"));
-        b.getCompany(2).getAccount("2345").deposit(350);
-        b.addCustomer(1, "Customer", "1");
-        b.addCustomer(2, "Customer", "2");
-        Customer c = b.getCustomer(1);
-        c.openAccount("3456");
-        c.openAccount("3457");
-        c.getAccount("3456").deposit(150);
-        c.getAccount("3457").deposit(250);
-        c = b.getCustomer(2);
-        c.openAccount("4567");
-        c.getAccount("4567").deposit(1000);
-        b.addAccount(c.getAccount("4567"));
-        c = b.getCustomer(1);
-        b.addAccount(c.getAccount("3456"));
-        b.addAccount(c.getAccount("3457"));
-        System.out.println(b.toString());
+        Bank garanti = new Bank("Garanti", "Altınkum");
+        PersonalAccount gokhansAccount = new PersonalAccount("54", "Gokhan",
+                "Kırca", 512.75d);
+        BusinessAccount kursadsAccount = new BusinessAccount("1234", 10000.0d, 4);
+        garanti.addCustomer(7, "Baran", "Kırca");
+        garanti.getCustomer("Baran", "Kırca").openAccount("7");
+        garanti.getCustomer("Baran", "Kırca").getAccount("7").deposit(1000.0d);
+        System.out.println(garanti.getCustomer(7).writePersonalAccountsDown());
+        garanti.addCompany(31, "Sentaks");
+        garanti.addAccount(gokhansAccount);
+        garanti.addAccount(kursadsAccount);
+        garanti.getCompany(31).openAccount("31",  4.0d);
+        garanti.getCompany(31).getAccount("31").deposit(100000.0d);
+        System.out.println(garanti.getCompany(31).writeBusinessAccountsDown());
+        System.out.println(garanti);
+        System.out.println(garanti.getAccount("1234"));
+        garanti.transferFunds("54", "1234", 512.75d);
+        garanti.closeAccount("54");
+        System.out.println(garanti.getAccount("1234"));
     }
 }
 
@@ -145,7 +136,7 @@ class Bank {
         if (getAccount(accountNumber).getBalance() > 0) {
             throw new BalanceRemainingException(getAccount(accountNumber).getBalance());
         } else {
-            accounts.remove(getAccount(accountNumber));
+           accounts.remove(getAccount(accountNumber));
         }
     }
 
@@ -297,7 +288,7 @@ class BusinessAccount extends Account {
 
     public void setInterestRate(double interestRate) {
         if (interestRate > 0) {
-            setInterestRate(interestRate);
+            this.interestRate = interestRate;
         } else {
             throw new IllegalArgumentException("Rate must be positive");
         }
