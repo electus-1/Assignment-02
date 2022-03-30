@@ -170,22 +170,18 @@ class Account {
     private String accountNumber;
     private double balance;
 
-    Account() {
-
-    }
-
     Account(String accountNumber) {
         this.accountNumber = accountNumber;
-        this.balance = 0.0;
+        this.balance = 0.0d;
 
     }
 
     Account(String accountNumber, double balance) {
         this.accountNumber = accountNumber;
-        if (balance < 0) {
-            this.balance = 0.0;
-        } else {
+        if (balance >= 0) {
             this.balance = balance;
+        } else {
+            throw new IllegalArgumentException("Balance must be non-negative");
         }
     }
 
@@ -214,7 +210,7 @@ class Account {
     }
 
     public String toString() {
-        return "Account " + getAccountNumber() + " has " + getBalance();
+        return "Account " + this.accountNumber + " has " + this.balance;
     }
 
 }
@@ -224,9 +220,6 @@ class PersonalAccount extends Account {
     private String surname;
     private String PIN;
 
-    PersonalAccount() {
-
-    }
 
     PersonalAccount(String accountNumber, String name, String surname) {
         super(accountNumber);
@@ -283,20 +276,22 @@ class PersonalAccount extends Account {
 class BusinessAccount extends Account {
     private double interestRate;
 
-    BusinessAccount() {
-
-    }
-
     BusinessAccount(String accountNumber, double interestRate) {
         super(accountNumber);
-        setInterestRate(interestRate);
-
+        if (interestRate > 0) {
+            setInterestRate(interestRate);
+        } else {
+            throw new IllegalArgumentException("Rate must be positive");
+        }
     }
 
     BusinessAccount(String accountNumber, double balance, double interestRate) {
         super(accountNumber, balance);
-        setInterestRate(interestRate);
-
+        if (interestRate > 0) {
+            setInterestRate(interestRate);
+        } else {
+            throw new IllegalArgumentException("Rate must be positive");
+        }
     }
 
     public double getInterestRate() {
@@ -304,7 +299,11 @@ class BusinessAccount extends Account {
     }
 
     public void setInterestRate(double interestRate) {
-        this.interestRate = interestRate;
+        if (interestRate > 0) {
+            setInterestRate(interestRate);
+        } else {
+            throw new IllegalArgumentException("Rate must be positive");
+        }
     }
 
     public double calculateInterest() {
@@ -317,10 +316,6 @@ class Customer {
     private String name;
     private String surname;
     private ArrayList<PersonalAccount> personalAccounts = new ArrayList<>();
-
-    Customer() {
-
-    }
 
     Customer(String name, String surname) {
         setName(name);
@@ -342,20 +337,19 @@ class Customer {
 
     public void closeAccount(String accountNumber) {
         boolean flag = true;
-        for (int i = 0; i < personalAccounts.size(); i++) {
-            if (personalAccounts.get(i).getAccountNumber().equals(accountNumber)) {
+        for (PersonalAccount personalAccount : personalAccounts) {
+            if (personalAccount.getAccountNumber().equals(accountNumber)) {
                 flag = false;
-                if (personalAccounts.get(i).getBalance() > 0) {
-                    throw new BalanceRemainingException(personalAccounts.get(i).getBalance());
+                if (personalAccount.getBalance() > 0) {
+                    throw new BalanceRemainingException(personalAccount.getBalance());
                 } else {
-                    personalAccounts.remove(personalAccounts.get(i));
+                    personalAccounts.remove(personalAccount);
                 }
             }
         }
         if (flag) {
             throw new AccountNotFoundException(accountNumber);
         }
-
     }
 
     public String writePersonalAccountsDown() {
@@ -372,7 +366,11 @@ class Customer {
     }
 
     public void setId(int id) {
-        this.id = id;
+        if (id > 0) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("ID must be positive");
+        }
     }
 
     public String getName() {
@@ -400,10 +398,6 @@ class Company {
     private int id;
     private String name;
     private ArrayList<BusinessAccount> businessAccounts = new ArrayList<>();
-
-    Company() {
-
-    }
 
     Company(String name) {
         setName(name);
@@ -510,7 +504,7 @@ class CompanyNotFoundException extends RuntimeException {
 
     public CompanyNotFoundException(String name) {
         this.name = name;
-        this.id = 0;
+        this.id = 1;
     }
 
     @Override
@@ -535,7 +529,7 @@ class CustomerNotFoundException extends RuntimeException {
     }
 
     public CustomerNotFoundException(String name, String surname) {
-        this.id = 0;
+        this.id = 1;
         this.name = name;
         this.surname = surname;
     }
